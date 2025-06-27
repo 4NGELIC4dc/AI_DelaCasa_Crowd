@@ -22,7 +22,7 @@ public class AStar : MonoBehaviour
         {
             for (int y = 0; y < gridHeight; y++)
             {
-                // Calculate the position of the node based on its grid coordinates.
+                // Calculate the position of the node based on its grid coordinates
                 float xPos = x * nodeWidth + nodeWidth / 2 - gridSize.x / 2;
                 float yPos = y * nodeHeight + nodeHeight / 2 - gridSize.y / 2;
                 Vector3 nodePosition = new Vector3(xPos, 1, yPos);
@@ -90,7 +90,7 @@ public class AStar : MonoBehaviour
             }
         }
 
-        // No path found.
+        // No path found
         return null;
     }
 

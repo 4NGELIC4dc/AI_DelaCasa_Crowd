@@ -17,20 +17,20 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            // Check if the player clicked on a valid location.
+            // Check if the player clicked on a valid location
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 if (hit.transform.GetComponent<Node>().walkable)
                 {
-                    // Get the clicked position and find a path to it.
+                    // Get the clicked position and find a path to it
                     Vector3 targetPosition = hit.point;
                     FindPathToTarget(targetPosition);
                 }
             }
         }
 
-        // Move the player along the path if there is one.
+        // Move the player along the path if there is one
         MoveAlongPath();
     }
 
@@ -48,28 +48,28 @@ public class PlayerController : MonoBehaviour
             Node nextNode = currentPath[currentPathIndex];
             Vector3 targetPosition = nextNode.worldPosition;
 
-            // Calculate the distance between the player and the next node.
+            // Calculate the distance between the player and the next node
             float distanceToNode = Vector3.Distance(transform.position, targetPosition);
 
-            // Move the player towards the next node.
+            // Move the player towards the next node
             float moveSpeed = 5f;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
-            // Check if the player has reached the next node with a small threshold.
+            // Check if the player has reached the next node with a small threshold
             if (distanceToNode < 0.1f)
             {
-                // Center the player precisely on the node.
+                // Center the player precisely on the node
                 transform.position = targetPosition;
 
                 currentPathIndex++;
 
-                // If the player reached the end of the path, clear it.
+                // If the player reached the end of the path, clear it
                 if (currentPathIndex >= currentPath.Count)
                 {
                     currentPath = null;
                 }
             }
-            Debug.DrawLine(transform.position, targetPosition, Color.red); // Draw a red line between player and target node.
+            Debug.DrawLine(transform.position, targetPosition, Color.red); // Draw a red line between player and target node
             Debug.Log("Player Position: " + transform.position);
             Debug.Log("Target Node Position: " + targetPosition);
         }

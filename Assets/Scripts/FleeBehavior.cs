@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class FleeBehavior : MonoBehaviour
 {
 
-    public Transform target; // The threat to flee from
+    public Transform target; // To flee from
     private NavMeshAgent agent;
     public float fleeDistance = 5f;
 
@@ -45,10 +45,10 @@ public class FleeBehavior : MonoBehaviour
         Vector3 fleeDirection = transform.position - target.position;
         fleeDirection.y = 0; // Flatten direction
 
-        // Raycast to check for wall in flee direction
+        // Raycast to check for wall/building in flee direction
         if (Physics.Raycast(transform.position, fleeDirection.normalized, out hit, 2f))
         {
-            // If hit wall, pick a side direction
+            // If hit wall/building, pick a side direction
             fleeDirection = Vector3.Cross(fleeDirection, Vector3.up); // Turn perpendicular
         }
 

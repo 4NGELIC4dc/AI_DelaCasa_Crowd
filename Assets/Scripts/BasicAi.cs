@@ -1,14 +1,5 @@
 using UnityEngine;
 
-/*
-Piang
-Endaya
-Almanzor
-Tabuno
-Flores
-Onella
-*/
-
 public class BasicAi : MonoBehaviour
 {
     public float moveSpeed = 5f;

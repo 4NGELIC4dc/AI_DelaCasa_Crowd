@@ -26,14 +26,14 @@ public class CrowdSpawnner : MonoBehaviour
             return;
         }
 
-        // Pick a random prefab from the list
+        // Pick random prefab from the list
         GameObject prefab = npcPrefabs[Random.Range(0, npcPrefabs.Length)];
 
-        // Pick a random point around the spawner within spawnRadius
+        // Pick random point around the spawner within spawnRadius
         Vector3 randomPos = transform.position + Random.insideUnitSphere * spawnRadius;
         randomPos.y = 0f;
 
-        // Check if it's on the NavMesh (optional but recommended)
+        // Check if it is on the NavMesh (optional but recommended)
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomPos, out hit, 2f, NavMesh.AllAreas))
         {

@@ -21,14 +21,14 @@ public class Movement : MonoBehaviour
             Vector3 avoidDirection = Vector3.Cross(Vector3.up, hit.normal);
             avoidDirection.y = 0.0f;
 
-            Debug.DrawLine(transform.position, hit.point, Color.red); // Draw a red line to visualize the raycast hit point
-            Debug.DrawLine(hit.point, hit.point + hit.normal, Color.green); // Draw a green line to visualize the hit normal
+            Debug.DrawLine(transform.position, hit.point, Color.red); // Draw red line to visualize the raycast hit point
+            Debug.DrawLine(hit.point, hit.point + hit.normal, Color.green); // Draw green line to visualize the hit normal
 
             targetDirection = Vector3.Lerp(targetDirection, avoidDirection, Mathf.Clamp01(hit.distance / 20f));
         }
         else
         {
-            Debug.DrawRay(transform.position, transform.forward * 20f, Color.blue); // Draw a blue line to visualize the raycast
+            Debug.DrawRay(transform.position, transform.forward * 20f, Color.blue); // Draw blue line to visualize the raycast
         }
 
         transform.Translate(targetDirection * speed * Time.deltaTime, Space.World);
