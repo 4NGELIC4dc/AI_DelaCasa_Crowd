@@ -3,73 +3,94 @@ using UnityEngine.AI;
 
 public class WanderingAgent : MonoBehaviour
 {
-    private NavMeshAgent agent;
-    private Vector3 destination;
-
     public float wanderRadius = 10f;
-    public float wanderTimer = 10f;
+    public float wanderTimer = 5f;
 
-    public float pauseDuration = 2f;
+    private NavMeshAgent agent;
+    private Animator animator;
 
-    private bool IsPaused = false;
     private float timer;
-    private float pauseTimer;
-    // Vector3[]/ or List<Vector3> points
+    private bool isResting = false;
 
-    private void Start()
+    private float idleTimer = 0f;
+    private float nextIdleTime;       // Random time between idles
+    private float currentIdleDuration; // How long idle lasts
+
+    void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+
         timer = wanderTimer;
-        SetNewRandomDestination();
+
+        // Immediately start walking
+        animator.SetBool("isWalking", true);
+        agent.isStopped = false;
+
+        // Initial walk target
+        Wander();
+
+        // Random time until next idle
+        nextIdleTime = Random.Range(10f, 30f);
     }
 
-    private void Update()
+    void Update()
     {
-        if (!FleeBehavior.isFleeing)
+        // Walk or idle state logic
+        if (isResting)
         {
-            if (!IsPaused)
+            idleTimer += Time.deltaTime;
+
+            if (idleTimer >= currentIdleDuration)
             {
-                timer += Time.deltaTime;
+                isResting = false;
+                idleTimer = 0f;
 
-                if (timer >= wanderTimer)
-                {
-                    SetNewRandomDestination();
-                }
+                agent.isStopped = false;
+                animator.SetBool("isWalking", true);
 
-                if (agent.remainingDistance < 1f)
-                {
-                    SetNewRandomDestination();
-                }
+                timer = wanderTimer; // reset wandering
+                nextIdleTime = Random.Range(10f, 30f);
             }
-            else
-            {
-                pauseTimer += Time.deltaTime;
-
-                if (pauseTimer >= pauseDuration)
-                {
-                    IsPaused = false;
-                    SetNewRandomDestination();
-                }
-            }
+            return;
         }
-        // if you the agent sees an enemy either it can attach/hide/etc
+
+        timer += Time.deltaTime;
+
+        // Only start idle after nextIdleTime
+        if (timer >= nextIdleTime)
+        {
+            isResting = true;
+            currentIdleDuration = Random.Range(3f, 5f); // Per-agent rest duration
+            idleTimer = 0f;
+
+            agent.isStopped = true;
+            animator.SetBool("isWalking", false);
+            return;
+        }
+
+        // Regular wander move
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            Wander(); // Choose new destination
+        }
+
+        // Sync animator with actual movement
+        bool isMoving = agent.velocity.magnitude > 0.1f && !agent.isStopped;
+        animator.SetBool("isWalking", isMoving);
     }
-    private void SetNewRandomDestination()
+
+    private void Wander()
     {
-        Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
-        randomDirection += transform.position;
+        Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
+        agent.SetDestination(newPos);
+    }
 
-        NavMeshHit navHit;
-        NavMesh.SamplePosition(randomDirection, out navHit, wanderRadius, -1);
-
-        destination = navHit.position;
-        agent.SetDestination(destination);
-        timer = 0;
-
-        if (Random.Range(0, 1f) < 0.8f) // 80% chance of stoppping
-        {
-            IsPaused = true;
-            pauseTimer = 0;
-        }
+    public static Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
+    {
+        Vector3 randDirection = Random.insideUnitSphere * dist;
+        randDirection += origin;
+        NavMesh.SamplePosition(randDirection, out NavMeshHit navHit, dist, layermask);
+        return navHit.position;
     }
 }

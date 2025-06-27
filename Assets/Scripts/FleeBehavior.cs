@@ -13,16 +13,17 @@ public class FleeBehavior : MonoBehaviour
     public static bool isFleeing;
     void Start()
     {
-        target = FindObjectOfType<NavmeshPlayerController>().transform;
-        agent = GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>(); 
 
-        if (IsTargetClose())
+        if (target == null)
         {
-            // method for the flee behavior
-            FleeFromTheTarget();
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                target = player.transform;
+            }
         }
     }
-
     void Update()
     {
         if (IsTargetClose())
@@ -40,12 +41,21 @@ public class FleeBehavior : MonoBehaviour
 
     private void FleeFromTheTarget()
     {
-        if (target != null)
-        {
-            Vector3 fleeDirection = transform.position - target.position;
-            Vector3 fleePosition = transform.position + fleeDirection.normalized * 10f; // Adjust this value to whatever you want
+        RaycastHit hit;
+        Vector3 fleeDirection = transform.position - target.position;
+        fleeDirection.y = 0; // Flatten direction
 
-            NavMesh.SamplePosition(fleePosition, out NavMeshHit navHit, 10, NavMesh.AllAreas);
+        // Raycast to check for wall in flee direction
+        if (Physics.Raycast(transform.position, fleeDirection.normalized, out hit, 2f))
+        {
+            // If hit wall, pick a side direction
+            fleeDirection = Vector3.Cross(fleeDirection, Vector3.up); // Turn perpendicular
+        }
+
+        Vector3 fleePosition = transform.position + fleeDirection.normalized * 10f;
+
+        if (NavMesh.SamplePosition(fleePosition, out NavMeshHit navHit, 10, NavMesh.AllAreas))
+        {
             agent.SetDestination(navHit.position);
         }
     }
