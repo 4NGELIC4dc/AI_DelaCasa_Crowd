@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StrongWomanWalk
       objectReference: {fileID: 0}
+    - target: {fileID: 1740595652405777996, guid: fe7f2e68c39a05240a71987b06d112ec, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d53cabec89fa6fa4a9c272076ba1700c, type: 2}
     - target: {fileID: 5866666021909216657, guid: fe7f2e68c39a05240a71987b06d112ec, type: 3}
       propertyPath: m_Controller
       value: 

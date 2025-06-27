@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ManWalking
       objectReference: {fileID: 0}
+    - target: {fileID: 2466339753586766844, guid: 3f35969db7033f847a7489be975aa396, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 351a5becf7053e04b9ec516b5caf2327, type: 2}
     - target: {fileID: 5866666021909216657, guid: 3f35969db7033f847a7489be975aa396, type: 3}
       propertyPath: m_Controller
       value: 

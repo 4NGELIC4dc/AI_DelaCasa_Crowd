@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WomanWalking
       objectReference: {fileID: 0}
+    - target: {fileID: 2183159074404969932, guid: e51c66587f2397f4db2c29871f7e8ad3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 46e5c3c834f075a499369abfafbeddc9, type: 2}
     - target: {fileID: 5866666021909216657, guid: e51c66587f2397f4db2c29871f7e8ad3, type: 3}
       propertyPath: m_Controller
       value: 
